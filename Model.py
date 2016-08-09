@@ -1,4 +1,4 @@
-from TFlearn import *
+from TFLearn import *
 import tensorflow as tf
 import tflearn
 from tflearn import utils

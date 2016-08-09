@@ -41,7 +41,7 @@ def generatePattern(
 		
 		#print pattern.shape
 		ratio = (pattern.sum()/(dimy*dimx))
-		print "Ratio %4.5f" % (pattern.sum()/(dimy*dimx))
+		# print "Ratio %4.5f" % (pattern.sum()/(dimy*dimx))
 		pattern = np.fft.fftshift(pattern, axes=(0,1))
 	return pattern
 ##################################################################
@@ -62,6 +62,7 @@ def generateMask(
 	mask = np.zeros((dimz, dimy, dimx))
 	for k in range(dimz):
 		mask[k,:,:] = generatePattern(dimy, dimx, sampling_rate, center_ratio)
+	print "Ratio %4.5f" % (mask.sum()/(dimz*dimy*dimx))
 	return mask
 
 ##################################################################
