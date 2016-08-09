@@ -19,76 +19,15 @@ import logging
 ######################################################################################
 
 def train():
-	# X = np.load('X_train.npy')
-	# y = np.load('y_train.npy')
 
-	# y  = y.astype('float32')
-	# X  = X.astype('float32')
-	
-	# print "X shape", X.shape
-	# print "X dtype", X.dtype
-	# print "Y shape", y.shape
-	# print "Y dtype", y.dtype
-	
 	## Load the data 
 	print "Load the data"
 	images = np.load('images.npy')
 	
-	# Xz, Xf = generatePair(images)
-	X, y, R = generatePair(images)
-	
-	print X.shape
-	print y.shape
-	# print R.shape
-	X = np.transpose(X, (0,2,3,1))
-	y = np.transpose(y, (0,2,3,1))
-	# R = np.transpose(R, (0,2,3,1))
-	# X = X/255.0
-	# y = y/255.0
-	
-	np.save("X_train.npy", X)
-	np.save("y_train.npy", y)
-	# np.save("R_train.npy", R)
-		
-	# X = np.load("X_train.npy")
-	# y = np.load("y_train.npy")
-	# R = np.load("R_train.npy")
-	
-	##################################################################################
-	# One hot code the full reconstruction
-	# y = np.reshape(y, (-1, 400*width*width))
-	# print y.shape
-	# current_shape = y.flatten().shape[0]
-	# print current_shape
-	# one_hot_shape = [current_shape, 256]
-	
-	# new_y = np.zeros((current_shape, 256), dtype=np.int32)
-	# new_y[np.arange(256), y] = 1
-	# new_y = np.eye(256, dtype=np.int32)[y]
-	# new_y = np.squeeze(new_y)
-	# new_y = np.array([:,(x < y.flatten().all()) for x in range(256)], dtype=np.uint8)
-	
-	# print "New y"
-	# print new_y.shape
-	# assert(np.argmax(np.squeeze(new_y), axis=1).all()==y.all())
-	
-	# # Take the inverse
-	# print "Run the postfix: [1, 2]/4 => [[1,1,0,0],[1,1,1,0]"
-	# print "Run the postfix: [1, 2]/4 => [[1,1,0,0],[1,1,1,0]"
-	# # new_y = new_y[:,::-1]
-	# cum_y = np.cumsum(new_y, axis=1) #[1,1,0,0]
-	# cum_y = 1-cum_y
-	# # new_y = new_y + cum_y # postfix sum
-	# assert(np.sum(cum_y, axis=1).all()==y.all())
-	
-	# y = np.squeeze(cum_y) 	# Recast the y
 
 	
-	# y = np.reshape(y, (-1, 256*tempo, width, width))
-	# y = np.reshape(y, (-1, width, width, 256*tempo))
-	# y = np.transpose(y, (0, 3, 1, 2)) # permute the dimension to get the channel in 1st
 	##################################################################################
-	# y = np.reshape(y, (-1, tempo*width*width))
+	
 	##################################################################################
 	nb_iter 		= 100001
 	epochs_per_iter = 1 
@@ -146,7 +85,7 @@ def train():
 				validation_set=0.2,
 				shuffle=True,
 				show_metric=True,
-				snapshot_step=160, 
+				snapshot_step=1500, 
 				snapshot_epoch=False,
 				batch_size=batch_size)
 		if iter%100==0:
