@@ -26,7 +26,8 @@ def generatePair(images):
 	###########################################################
 	# Generate the 3 channel input
 	# Generate the undersampling pattern
-	mask   =  generateMask(dimn, dimy, dimx, sampling_rate=0.25, center_ratio=0.5)
+	mask   =  generateMask(dimn*dimz, dimy, dimx, sampling_rate=0.25, center_ratio=0.5)
+	mask   =  np.reshape(mask, (dimn, dimz, dimy, dimx))
 	# print "mask.shape"
 	# print mask.shape
 	# Perform forward Fourier transform
@@ -42,7 +43,7 @@ def generatePair(images):
 	#for z in range(dimz):
 	# Assign the channels
 
-	srcImage = np.abs(zfill)  /255
+	srcImage = np.abs(zfill)  
 	
 	# srcImage = np.abs(zfill) /255
 	# srcImage = np.expand_dims(srcImage, axis=0)

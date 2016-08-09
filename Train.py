@@ -150,6 +150,7 @@ def train():
 				snapshot_epoch=False,
 				batch_size=batch_size)
 		if iter%100==0:
-			model.save('model.tfl')
+			fname = 'model_%05d.tfl' %(iter)
+			model.save(fname)
 if __name__ == '__main__':
 	train()
