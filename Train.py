@@ -36,7 +36,7 @@ def train():
 	model = get_model()
 	
 	
-	nb_folds = 4
+	nb_folds = 3
 	kfolds = KFold(len(images), nb_folds)
 	for iter in range(nb_iter):
 		print('-'*50)
@@ -79,13 +79,13 @@ def train():
 			
 			
 						
-			model.fit(X, y, 
+			model.fit(X_train, y_train, 
 				run_id="fully_convolutional_neural_network", 
 				n_epoch=1, 
-				validation_set=0.2,
+				validation_set=(X_valid, y_valid)
 				shuffle=False,
 				show_metric=True,
-				snapshot_step=120, 
+				snapshot_step=100, 
 				snapshot_epoch=False,
 				batch_size=batch_size)
 		if iter%100==0:
