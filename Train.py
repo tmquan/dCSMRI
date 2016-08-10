@@ -82,9 +82,9 @@ def train():
 						
 			model.fit(X_train, y_train, 
 				run_id="direct_model", 
-				n_epoch=2, 
+				n_epoch=1, 
 				validation_set=(X_valid, y_valid),
-				shuffle=False,
+				shuffle=True,
 				show_metric=True,
 				snapshot_step=80, 
 				snapshot_epoch=False,

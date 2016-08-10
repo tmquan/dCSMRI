@@ -14,115 +14,121 @@ Augmentation  = ImageAugmentation()
 Augmentation.add_random_blur()
 
 def get_cae():
-	arch = tflearn.input_data(shape=[None, 256, 256, 20], name='input')
-	# arch = arch/255.0
+	encoder = tflearn.input_data(shape=[None, 256, 256, 20], name='input')
+	encoder = encoder/255.0
 	num_filter = 10*20
-	# arch = tflearn.conv_2d(arch, 40, 3, activation='relu')
+	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='leaky_relu')
 	
 
-	arch = tflearn.residual_block(arch, 1, num_filter*1)
-	# arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
-	arch = tflearn.layers.normalization.batch_normalization (arch)
-	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	# encoder = tflearn.residual_block(encoder, 1, num_filter*1)
+	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='leaky_relu')
+	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	encoder = tflearn.max_pool_2d(encoder, 2)
+	# encoder = tflearn.dropout(encoder, 0.75)
 
 
-	arch = tflearn.residual_block(arch, 1, num_filter*2)
-	# arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
-	arch = tflearn.layers.normalization.batch_normalization (arch)
-	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	# encoder = tflearn.residual_block(encoder, 1, num_filter*2)
+	encoder = tflearn.conv_2d(encoder, num_filter*2, 3, activation='leaky_relu')
+	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	encoder = tflearn.max_pool_2d(encoder, 2)
+	# encoder = tflearn.dropout(encoder, 0.75)
 
 
-	arch = tflearn.residual_block(arch, 1, num_filter*4)
-	# arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
-	arch = tflearn.layers.normalization.batch_normalization (arch)
-	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	# encoder = tflearn.residual_block(encoder, 1, num_filter*4)
+	encoder = tflearn.conv_2d(encoder, num_filter*4, 3, activation='leaky_relu')
+	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	encoder = tflearn.max_pool_2d(encoder, 2)
+	# encoder = tflearn.dropout(encoder, 0.75)
 	
 
-	arch = tflearn.residual_block(arch, 1, num_filter*8)
-	# arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
-	arch = tflearn.layers.normalization.batch_normalization (arch)
-	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	# encoder = tflearn.residual_block(encoder, 1, num_filter*8)
+	encoder = tflearn.conv_2d(encoder, num_filter*8, 3, activation='leaky_relu')
+	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	encoder = tflearn.max_pool_2d(encoder, 2)
+	# encoder = tflearn.dropout(encoder, 0.75)
 
 
-	arch = tflearn.residual_block(arch, 1, num_filter*16)
-	# arch = tflearn.conv_2d(arch, num_filter*16, 3, activation='relu')
-	arch = tflearn.layers.normalization.batch_normalization (arch)
+	# encoder = tflearn.residual_block(encoder, 1, num_filter*16)
+	encoder = tflearn.conv_2d(encoder, num_filter*16, 3, activation='leaky_relu')
+	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 
-	# arch = tflearn.upsample_2d(arch, 2)
-	arch = tflearn.layers.conv.upscore_layer(arch, 
+
+
+	# decoder = tflearn.upsample_2d(encoder, 2)
+	decoder = tflearn.layers.conv.upscore_layer(encoder, 
 						 num_classes=256, 
 						 kernel_size=3, 
 						 shape=[1, 32, 32, num_filter*8]
 						 ) 
-	# arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
-	arch = tflearn.conv_2d_transpose(arch, 
-									 nb_filter=num_filter*8, 
-									 filter_size=3, 
-									 activation='relu',
-									 output_shape=[32, 32])
-	arch = tflearn.layers.normalization.batch_normalization (arch)
+	decoder = tflearn.conv_2d(decoder, num_filter*8, 3, activation='leaky_relu')
+	# decoder = tflearn.residual_block(decoder, 1, num_filter*8)
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*8, 
+	# 								 filter_size=3, 
+	# 								 activation='leaky_relu',
+	# 								 output_shape=[32, 32])
+	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 	
 	
-	# arch = tflearn.dropout(arch, 0.75)
-	# arch = tflearn.upsample_2d(arch, 2)
-	arch = tflearn.layers.conv.upscore_layer(arch, 
+	# decoder = tflearn.dropout(decoder, 0.75)
+	# decoder = tflearn.upsample_2d(decoder, 2)
+	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
 							 kernel_size=3, 
 							 shape=[1, 64, 64, num_filter*4]
 							 ) 
-	# arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
-	arch = tflearn.conv_2d_transpose(arch, 
-									 nb_filter=num_filter*4, 
-									 filter_size=3, 
-									 activation='relu',
-									 output_shape=[64, 64])
-	arch = tflearn.layers.normalization.batch_normalization (arch)
+	decoder = tflearn.conv_2d(decoder, num_filter*4, 3, activation='leaky_relu')
+	# decoder = tflearn.residual_block(decoder, 1, num_filter*4)
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*4, 
+	# 								 filter_size=3, 
+	# 								 activation='leaky_relu',
+	# 								 output_shape=[64, 64])
+	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
-	# arch = tflearn.dropout(arch, 0.75)
-	# arch = tflearn.upsample_2d(arch, 2)
-	arch = tflearn.layers.conv.upscore_layer(arch, 
+	# decoder = tflearn.dropout(decoder, 0.75)
+	# decoder = tflearn.upsample_2d(decoder, 2)
+	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
 							 kernel_size=3, 
 							 shape=[1, 128, 128, num_filter*2]
 							 ) 
-	# arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
-	arch = tflearn.conv_2d_transpose(arch, 
-									 nb_filter=num_filter*2, 
-									 filter_size=3, 
-									 activation='relu',
-									 output_shape=[128, 128])
-	arch = tflearn.layers.normalization.batch_normalization (arch)
+	decoder = tflearn.conv_2d(decoder, num_filter*2, 3, activation='leaky_relu')
+	# decoder = tflearn.residual_block(decoder, 1, num_filter*2)
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*2, 
+	# 								 filter_size=3, 
+	# 								 activation='leaky_relu',
+	# 								 output_shape=[128, 128])
+	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
-	# arch = tflearn.dropout(arch, 0.75)
-	# arch = tflearn.upsample_2d(arch, 2)
-	arch = tflearn.layers.conv.upscore_layer(arch, 
+	# decoder = tflearn.dropout(decoder, 0.75)
+	# decoder = tflearn.upsample_2d(decoder, 2)
+	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
 							 kernel_size=3, 
 							 shape=[1, 256, 256, num_filter*1]
 							 ) 
-	# arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
-	arch = tflearn.conv_2d_transpose(arch, 
+	decoder = tflearn.conv_2d(decoder, num_filter*1, 3, activation='leaky_relu')
+	# decoder = tflearn.residual_block(decoder, 1, num_filter*1)
+	decoder = tflearn.conv_2d_transpose(decoder, 
 									 nb_filter=num_filter*1, 
 									 filter_size=3, 
-									 activation='relu',
+									 activation='leaky_relu',
 									 output_shape=[256, 256])
-	arch = tflearn.layers.normalization.batch_normalization (arch)
+	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
-	# arch = tflearn.dropout(arch, 0.75) 
+	# decoder = tflearn.dropout(decoder, 0.75) 
 	
-	arch = tflearn.conv_2d(arch, 20, 1, activation='relu')
-	# arch = tflearn.conv_2d_transpose(arch, 
+	decoder = tflearn.conv_2d(decoder, 20, 1, activation='leaky_relu')
+	# decoder = tflearn.conv_2d_transpose(decoder, 
 	# 								 nb_filter=20, 
 	# 								 filter_size=3, 
-	# 								 activation='relu',
+	# 								 activation='leaky_relu',
 	# 								 output_shape=[256, 256])
 
 	
-	return arch
+	return decoder
 ########################################################
 def get_model():
 	"""

@@ -44,7 +44,8 @@ def train():
 		print('-'*50) 
 		
 		X, y, R = generatePair(images)
-	
+		# X 		= X/255.0
+		# y 		= y/255.0
 		print X.shape
 		print y.shape
 		# print R.shape
@@ -83,7 +84,7 @@ def train():
 				run_id="pretrain_model", 
 				n_epoch=1, 
 				validation_set=(y_valid, y_valid),
-				shuffle=False,
+				shuffle=True,
 				show_metric=True,
 				snapshot_step=80, 
 				snapshot_epoch=False,
@@ -91,7 +92,7 @@ def train():
 		del X_train, X_valid, y_train, y_valid
 		del X, y, R
 		if iter%100==0:
-			fname = 'model_pretrained_%05d.tfl' %(iter)
+			fname = 'model_pretrain_%05d.tfl' %(iter)
 			model.save(fname)
 if __name__ == '__main__':
 	train()
