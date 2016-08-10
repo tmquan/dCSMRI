@@ -20,63 +20,63 @@ def get_cae():
 	num_filter = 10*20
 
 	
-	arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
+	arch = tflearn.conv_2d(arch, num_filter*1, 4, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
-	arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*2, 4, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
-	arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*4, 4, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	
-	arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
+	arch = tflearn.conv_2d(arch, num_filter*8, 4, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
-	arch = tflearn.conv_2d(arch, num_filter*16, 3, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*16, 4, activation='relu')
 	
 	# arch = tflearn.reshape(arch, new_shape=[-1, 16*16*num_filter*16])
 	# arch = tflearn.fully_connected(arch,  16*16*num_filter*16, activation='relu')
 	# arch = tflearn.reshape(arch, new_shape=[-1, 16,16,num_filter*16])
 	
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	# arch = tflearn.upsample_2d(arch, 2)
 	arch = tflearn.layers.conv.upscore_layer(arch, 
-						 num_classes=num_filter*8, 
+						 num_classes=256, 
 						 kernel_size=3, 
-						 shape=[1, 32, 32, 20]
+						 shape=[1, 32, 32, num_filter*16]
 						 ) 
-	arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
+	arch = tflearn.conv_2d(arch, num_filter*8, 4, activation='relu')
 	
 	
 	
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	# arch = tflearn.upsample_2d(arch, 2)
 	arch = tflearn.layers.conv.upscore_layer(arch, 
-							 num_classes=num_filter*8, 
+							 num_classes=256, 
 							 kernel_size=3, 
-							 shape=[1, 64, 64, 20]
+							 shape=[1, 64, 64, num_filter*8]
 							 ) 
-	arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
-	arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*4, 4, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
 	# arch = tflearn.upsample_2d(arch, 2)
 	arch = tflearn.layers.conv.upscore_layer(arch, 
-							 num_classes=num_filter*4, 
+							 num_classes=256, 
 							 kernel_size=3, 
-							 shape=[1, 128, 128, 20]
+							 shape=[1, 128, 128, num_filter*4]
 							 ) 
-	arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
-	arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*2, 4, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
 	# arch = tflearn.upsample_2d(arch, 2)
 	arch = tflearn.layers.conv.upscore_layer(arch, 
-							 num_classes=num_filter*2, 
+							 num_classes=256,  
 							 kernel_size=3, 
-							 shape=[1, 256, 256, 20]
+							 shape=[1, 256, 256, num_filter*2]
 							 ) 
-	arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
-	arch = tflearn.dropout(arch, 0.75) 
+	arch = tflearn.conv_2d(arch, num_filter*1, 4, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75) 
 	
-	arch = tflearn.conv_2d(arch, 20, 3, activation='relu')
+	arch = tflearn.conv_2d(arch, 20, 3, activation='sigmoid')
 	
 	return arch
 ########################################################
@@ -90,7 +90,7 @@ def get_model():
 	
 	net = tflearn.regression(arch, optimizer='adam', 
 						 metric='accuracy',
-						 learning_rate=0.01,
+						 learning_rate=0.001,
                          loss='mean_square')
 	# Training the network
 	model = DNN(net, 
