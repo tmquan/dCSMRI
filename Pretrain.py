@@ -79,10 +79,10 @@ def train():
 			
 			
 						
-			model.fit(X_train, y_train, 
-				run_id="direct_model", 
+			model.fit(y_train, y_train, 
+				run_id="pretrain_model", 
 				n_epoch=1, 
-				validation_set=(X_valid, y_train),
+				validation_set=(y_valid, y_train),
 				shuffle=False,
 				show_metric=True,
 				snapshot_step=80, 

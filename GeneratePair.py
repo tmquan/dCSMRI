@@ -43,9 +43,10 @@ def generatePair(images):
 	#for z in range(dimz):
 	# Assign the channels
 
-	srcImage = np.abs(zfill)  
+	# srcImage = np.abs(zfill)  
+	srcImage = np.real(zfill)
 	
-	srcImage = np.abs(zfill) /255
+	srcImage = srcImage/np.max(srcImage) * 255.0
 	# srcImage = np.expand_dims(srcImage, axis=0)
 	
 	#print srcImage.shape
