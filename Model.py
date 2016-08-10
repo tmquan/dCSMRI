@@ -16,41 +16,46 @@ Augmentation.add_random_blur()
 def get_cae():
 	arch = tflearn.input_data(shape=[None, 256, 256, 20], name='input')
 	# arch = arch/255.0
-	num_filter = 16*20
+	num_filter = 10*20
 	# arch = tflearn.conv_2d(arch, 40, 3, activation='relu')
 	
 
-	# arch = tflearn.residual_block(arch, 1, num_filter*1)
+	arch = tflearn.residual_block(arch, 1, num_filter*1)
 	arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.dropout(arch, 0.75)
 
 
-	# arch = tflearn.residual_block(arch, 1, num_filter*2)
+	arch = tflearn.residual_block(arch, 1, num_filter*2)
 	arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.dropout(arch, 0.75)
 
 
-	# arch = tflearn.residual_block(arch, 1, num_filter*4)
+	arch = tflearn.residual_block(arch, 1, num_filter*4)
 	arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.dropout(arch, 0.75)
 	
 
-	# arch = tflearn.residual_block(arch, 1, num_filter*8)
+	arch = tflearn.residual_block(arch, 1, num_filter*8)
 	arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 	arch = tflearn.max_pool_2d(arch, 2)
-	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.dropout(arch, 0.75)
 
 
-	# arch = tflearn.residual_block(arch, 1, num_filter*16)
+	arch = tflearn.residual_block(arch, 1, num_filter*16)
 	arch = tflearn.conv_2d(arch, num_filter*16, 3, activation='relu')
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
 	# 					 num_classes=256, 
-	# 					 kernel_size=4, 
+	# 					 kernel_size=3, 
 	# 					 shape=[1, 32, 32, num_filter*8]
 	# 					 ) 
 	# arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
@@ -59,14 +64,14 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[32, 32])
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 	
 	
-	
-	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
 	# 						 num_classes=256, 
-	# 						 kernel_size=4, 
+	# 						 kernel_size=3, 
 	# 						 shape=[1, 64, 64, num_filter*4]
 	# 						 ) 
 	# arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
@@ -75,12 +80,13 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[64, 64])
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 
-	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
 	# 						 num_classes=256, 
-	# 						 kernel_size=4, 
+	# 						 kernel_size=3, 
 	# 						 shape=[1, 128, 128, num_filter*2]
 	# 						 ) 
 	# arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
@@ -89,13 +95,13 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[128, 128])
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 
-
-	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
 	# 						 num_classes=256, 
-	# 						 kernel_size=4, 
+	# 						 kernel_size=3, 
 	# 						 shape=[1, 256, 256, num_filter*1]
 	# 						 ) 
 	# arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
@@ -104,15 +110,16 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[256, 256])
+	arch = tflearn.layers.normalization.batch_normalization (arch)
 
-	# arch = tflearn.dropout(arch, 0.75) 
+	arch = tflearn.dropout(arch, 0.75) 
 	
-	# arch = tflearn.conv_2d(arch, 20, 1, activation='relu')
-	arch = tflearn.conv_2d_transpose(arch, 
-									 nb_filter=20, 
-									 filter_size=3, 
-									 activation='relu',
-									 output_shape=[256, 256])
+	arch = tflearn.conv_2d(arch, 20, 1, activation='relu')
+	# arch = tflearn.conv_2d_transpose(arch, 
+	# 								 nb_filter=20, 
+	# 								 filter_size=3, 
+	# 								 activation='relu',
+	# 								 output_shape=[256, 256])
 
 	
 	return arch
