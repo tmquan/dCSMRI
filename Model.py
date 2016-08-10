@@ -45,55 +45,6 @@ def convolution_module(net, kernel_size, filter_count, batch_norm=True, down_poo
 
 	return net
 
-def get_fcn():
-	batch_size = 20 #shape[0] #20
-
-	net  = input_data(shape=[None, 256, 256, 1],
-					 data_preprocessing=Preprocessing,
-					 data_augmentation=Augmentation)
-	
-	# Setting hyper parameter
-	kernel_size 	= 3
-	filter_count 	= 32	 # Original unet use 64 and 2 layers of conv
-
-	net 	= net/255
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*1, down_pool=True)
-	pool1	= net
-	net		= dropout(net, 0.5)
-	
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*2, down_pool=True)
-	pool2	= net
-	net		= dropout(net, 0.5)
-	
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*4, down_pool=True)
-	pool3	= net
-	net		= dropout(net, 0.5)
-
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*8)
-
-	net		= dropout(net, 0.5)
-	net		= merge([pool3, net], mode='concat', axis=3)
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*4)
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*4, up_pool=True)
-
-	net		= dropout(net, 0.5)
-	net		= merge([pool2, net], mode='concat', axis=3)
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*2)
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*2, up_pool=True)
-
-	net		= dropout(net, 0.5)
-	net		= merge([pool1, net], mode='concat', axis=3)
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*1)
-	net		= convolution_module(net, kernel_size, filter_count=filter_count*1, up_pool=True)
-
-	net		= dropout(net, 0.5)	
-	net		= convolution_module(net, kernel_size, filter_count=16, batch_norm=False, act_type="sigmoid")
-	
-	net		= convolution_module(net, kernel_size, filter_count=256*tempo, batch_norm=False, act_type="sigmoid")
-	# net     = tf.cast(net > 0.5, tf.float32)
-	# net 	= highway_conv_2d(net, 8, 3, activation='sigmoid')
-	# net 	= highway_conv_2d(net, 2, 1, activation='sigmoid')
-	return net
 def get_cae():
 	arch = tflearn.input_data(shape=[None, 256, 256, 20], name='input')
 	
@@ -108,82 +59,82 @@ def get_cae():
 	# arch = tflearn.conv_2d(arch, 40, 3, activation='relu')
 	# arch = tflearn.upsample_2d(arch, 2)
 	
-	arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
-	arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
-	arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	
-	arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 
-	# arch = tflearn.conv_2d(arch, num_filter*16, 3, activation='relu')
-	arch = tflearn.residual_block(arch, 2, num_filter*16)	
-	# arch = tflearn.residual_block(arch, 2, num_filter*16)	
-	# arch = tflearn.reshape(arch, new_shape=[-1, 16*16, num_filter*16])
+	# arch = tflearn.conv_2d(arch, num_filter*56, 3, activation='relu')
+	arch = tflearn.residual_block(arch, 2, num_filter*5)	
+	# arch = tflearn.residual_block(arch, 2, num_filter*56)	
+	# arch = tflearn.reshape(arch, new_shape=[-1, 16*16, num_filter*56])
 	# arch = tflearn.lstm(arch, 16*16, return_seq=True)
-	# arch = tflearn.lstm(arch, 16*16*num_filter*16)
+	# arch = tflearn.lstm(arch, 16*16*num_filter*56)
 
-	# arch = tflearn.fully_connected(arch,  16*16*num_filter*16, activation='relu')
-	# arch = tflearn.reshape(arch, new_shape=[-1, 16,16,num_filter*16])
+	# arch = tflearn.fully_connected(arch,  16*16*num_filter*56, activation='relu')
+	# arch = tflearn.reshape(arch, new_shape=[-1, 16,16,num_filter*56])
 	
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
-						 # num_classes=num_filter*8, 
+						 # num_classes=num_filter*5, 
 						 # kernel_size=3, 
 						 # shape=[1, 32, 32]
 						 # ) 
-	arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
 	
 	
 
-				# arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
+				# arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
 					
-				# arch = tflearn.reshape(arch, new_shape=[-1, 32*32*num_filter*1])
-				# arch = tflearn.fully_connected(arch,  32*32*num_filter*1, activation='relu')
-				# arch = tflearn.fully_connected(arch,  32*32*num_filter*2, activation='relu')
-				# arch = tflearn.fully_connected(arch,  32*32*num_filter*1, activation='relu')
-				# arch = tflearn.fully_connected(arch,  20*20*num_filter*1, activation='relu')
-				# arch = tflearn.fully_connected(arch,  16*16*num_filter*1, activation='relu')
-				# arch = tflearn.fully_connected(arch,  12*12*num_filter*1, activation='relu')
-				# arch = tflearn.fully_connected(arch,  16*16*num_filter*1, activation='relu')
-				# arch = tflearn.fully_connected(arch,  20*20*num_filter*1, activation='relu')
-				# arch = tflearn.fully_connected(arch,  32*32*num_filter*1, activation='relu')
-				# arch = tflearn.reshape(arch, new_shape=[-1, 32,32,num_filter*1])
+				# arch = tflearn.reshape(arch, new_shape=[-1, 32*32*num_filter*5])
+				# arch = tflearn.fully_connected(arch,  32*32*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  32*32*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  32*32*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  20*20*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  16*16*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  12*12*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  16*16*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  20*20*num_filter*5, activation='relu')
+				# arch = tflearn.fully_connected(arch,  32*32*num_filter*5, activation='relu')
+				# arch = tflearn.reshape(arch, new_shape=[-1, 32,32,num_filter*5])
 				
-				# arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
+				# arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
 	
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
-							 # num_classes=num_filter*8, 
+							 # num_classes=num_filter*5, 
 							 # kernel_size=3, 
 							 # shape=[1, 64, 64]
 							 # ) 
-	arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
-	arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
-							 # num_classes=num_filter*4, 
+							 # num_classes=num_filter*5, 
 							 # kernel_size=3, 
 							 # shape=[1, 128, 128]
 							 # ) 
-	arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
-	arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
+	# arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.upsample_2d(arch, 2)
 	# arch = tflearn.layers.conv.upscore_layer(arch, 
-							 # num_classes=num_filter*2, 
+							 # num_classes=num_filter*5, 
 							 # kernel_size=3, 
 							 # shape=[1, 256, 256]
 							 # ) 
-	arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
-	# arch = tflearn.dropout(arch, 0.75) 
+	arch = tflearn.conv_2d(arch, num_filter*5, 3, activation='relu')
+	arch = tflearn.dropout(arch, 0.75) 
 	
 	arch = tflearn.conv_2d(arch, 20, 3, activation='relu')
 	
