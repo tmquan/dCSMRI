@@ -44,7 +44,7 @@ def get_cae():
 	arch = tflearn.layers.conv.upscore_layer(arch, 
 						 num_classes=num_filter*8, 
 						 kernel_size=3, 
-						 shape=[1, 32, 32]
+						 shape=[1, 32, 32, 20]
 						 ) 
 	arch = tflearn.conv_2d(arch, num_filter*8, 3, activation='relu')
 	
@@ -55,7 +55,7 @@ def get_cae():
 	arch = tflearn.layers.conv.upscore_layer(arch, 
 							 num_classes=num_filter*8, 
 							 kernel_size=3, 
-							 shape=[1, 64, 64]
+							 shape=[1, 64, 64, 20]
 							 ) 
 	arch = tflearn.conv_2d(arch, num_filter*4, 3, activation='relu')
 	arch = tflearn.dropout(arch, 0.75)
@@ -63,7 +63,7 @@ def get_cae():
 	arch = tflearn.layers.conv.upscore_layer(arch, 
 							 num_classes=num_filter*4, 
 							 kernel_size=3, 
-							 shape=[1, 128, 128]
+							 shape=[1, 128, 128, 20]
 							 ) 
 	arch = tflearn.conv_2d(arch, num_filter*2, 3, activation='relu')
 	arch = tflearn.dropout(arch, 0.75)
@@ -71,7 +71,7 @@ def get_cae():
 	arch = tflearn.layers.conv.upscore_layer(arch, 
 							 num_classes=num_filter*2, 
 							 kernel_size=3, 
-							 shape=[1, 256, 256]
+							 shape=[1, 256, 256, 20]
 							 ) 
 	arch = tflearn.conv_2d(arch, num_filter*1, 3, activation='relu')
 	arch = tflearn.dropout(arch, 0.75) 
