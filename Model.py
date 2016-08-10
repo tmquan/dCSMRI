@@ -17,56 +17,69 @@ Augmentation.add_random_blur()
 def get_cae():
 	arch = tflearn.input_data(shape=[None, 256, 256, 20], name='input')
 	
-	num_filter = 10*20
+	num_filter = 16*20
 
 	
 	arch = tflearn.conv_2d(arch, num_filter*1, 4, activation='relu')
+	# arch = tflearn.residual_block(arch, 1, num_filter*1)
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	arch = tflearn.conv_2d(arch, num_filter*2, 4, activation='relu')
+	# arch = tflearn.residual_block(arch, 1, num_filter*2)
 	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.conv_2d(arch, num_filter*3, 4, activation='relu')
+	# arch = tflearn.residual_block(arch, 1, num_filter*3)
+	arch = tflearn.max_pool_2d(arch, 2)
+	# arch = tflearn.dropout(arch, 0.75)
+	
 	arch = tflearn.conv_2d(arch, num_filter*4, 4, activation='relu')
+	# arch = tflearn.residual_block(arch, 1, num_filter*4)
 	arch = tflearn.max_pool_2d(arch, 2)
+	# arch = tflearn.dropout(arch, 0.75)
+
+	arch = tflearn.conv_2d(arch, num_filter*5, 4, activation='relu')
+	# arch = tflearn.residual_block(arch, 1, num_filter*5)
+
+	# arch = tflearn.residual_block(arch, 1, num_filter*6)
+	arch = tflearn.residual_block(arch, 2, num_filter*6)
 	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.residual_block(arch, 2, num_filter*6)
+
+	# arch = tflearn.reshape(arch, new_shape=[-1, 16*16*num_filter*5])
+	# arch = tflearn.fully_connected(arch,  16*16*num_filter*5, activation='relu')
+	# arch = tflearn.reshape(arch, new_shape=[-1, 16,16,num_filter*5])
 	
-	arch = tflearn.conv_2d(arch, num_filter*8, 4, activation='relu')
-	arch = tflearn.max_pool_2d(arch, 2)
-	arch = tflearn.dropout(arch, 0.75)
-	arch = tflearn.conv_2d(arch, num_filter*16, 4, activation='relu')
-	
-	# arch = tflearn.reshape(arch, new_shape=[-1, 16*16*num_filter*16])
-	# arch = tflearn.fully_connected(arch,  16*16*num_filter*16, activation='relu')
-	# arch = tflearn.reshape(arch, new_shape=[-1, 16,16,num_filter*16])
-	
-	arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.dropout(arch, 0.75)
 	# arch = tflearn.upsample_2d(arch, 2)
 	arch = tflearn.layers.conv.upscore_layer(arch, 
 						 num_classes=256, 
 						 kernel_size=4, 
-						 shape=[1, 32, 32, num_filter*16]
+						 shape=[1, 32, 32, num_filter*5]
 						 ) 
-	arch = tflearn.conv_2d(arch, num_filter*8, 4, activation='relu')
-	
-	
-	
-	arch = tflearn.dropout(arch, 0.75)
-	# arch = tflearn.upsample_2d(arch, 2)
-	arch = tflearn.layers.conv.upscore_layer(arch, 
-							 num_classes=256, 
-							 kernel_size=4, 
-							 shape=[1, 64, 64, num_filter*8]
-							 ) 
 	arch = tflearn.conv_2d(arch, num_filter*4, 4, activation='relu')
-	arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.residual_block(arch, 1, num_filter*4)
+	
+	
+	# arch = tflearn.dropout(arch, 0.75)
 	# arch = tflearn.upsample_2d(arch, 2)
 	arch = tflearn.layers.conv.upscore_layer(arch, 
 							 num_classes=256, 
 							 kernel_size=4, 
-							 shape=[1, 128, 128, num_filter*4]
+							 shape=[1, 64, 64, num_filter*4]
+							 ) 
+	arch = tflearn.conv_2d(arch, num_filter*3, 4, activation='relu')
+	arch = tflearn.residual_block(arch, 1, num_filter*3)
+	# arch = tflearn.dropout(arch, 0.75)
+	# arch = tflearn.upsample_2d(arch, 2)
+	arch = tflearn.layers.conv.upscore_layer(arch, 
+							 num_classes=256, 
+							 kernel_size=4, 
+							 shape=[1, 128, 128, num_filter*3]
 							 ) 
 	arch = tflearn.conv_2d(arch, num_filter*2, 4, activation='relu')
-	arch = tflearn.dropout(arch, 0.75)
+	arch = tflearn.residual_block(arch, 1, num_filter*2)
+	# arch = tflearn.dropout(arch, 0.75)
 	# arch = tflearn.upsample_2d(arch, 2)
 	arch = tflearn.layers.conv.upscore_layer(arch, 
 							 num_classes=256,  
@@ -74,9 +87,11 @@ def get_cae():
 							 shape=[1, 256, 256, num_filter*2]
 							 ) 
 	arch = tflearn.conv_2d(arch, num_filter*1, 4, activation='relu')
-	arch = tflearn.dropout(arch, 0.75) 
+	arch = tflearn.residual_block(arch, 1, num_filter*1)
+	# arch = tflearn.dropout(arch, 0.75) 
 	
 	arch = tflearn.conv_2d(arch, 20, 1, activation='relu')
+	arch = tflearn.residual_block(arch, 1, 20)
 	
 	return arch
 ########################################################
