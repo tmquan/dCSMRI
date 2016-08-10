@@ -41,8 +41,9 @@ def generatePattern(
 		
 		#print pattern.shape
 		ratio = (pattern.sum()/(dimy*dimx))
-		# print "Ratio %4.5f" % (pattern.sum()/(dimy*dimx))
+		
 		pattern = np.fft.fftshift(pattern, axes=(0,1))
+
 	return pattern
 ##################################################################
 def test_generatePattern():

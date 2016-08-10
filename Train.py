@@ -44,7 +44,8 @@ def train():
 		print('-'*50) 
 		
 		X, y, R = generatePair(images)
-	
+		# X 		= X/255.0
+		# y 		= y/255.0
 		print X.shape
 		print y.shape
 		# print R.shape
@@ -81,7 +82,7 @@ def train():
 						
 			model.fit(X_train, y_train, 
 				run_id="direct_model", 
-				n_epoch=1, 
+				n_epoch=2, 
 				validation_set=(X_valid, y_valid),
 				shuffle=False,
 				show_metric=True,
@@ -91,7 +92,7 @@ def train():
 		del X_train, X_valid, y_train, y_valid
 		del X, y, R
 		if iter%100==0:
-			fname = 'model_pretrained_%05d.tfl' %(iter)
+			fname = 'model_direct_%05d.tfl' %(iter)
 			model.save(fname)
 if __name__ == '__main__':
 	train()

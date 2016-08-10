@@ -31,29 +31,55 @@ def generatePair(images):
 	# print "mask.shape"
 	# print mask.shape
 	# Perform forward Fourier transform
-	kspace = np.fft.fft2(images)
-	
+	# kspace = np.fft.fft2(images)
+	kspace = np.fft.fft2(images, norm="ortho")
+	 
 	# Perform undersampling
 	under  = mask*kspace
-	del kspace
+	
 	# Perform inverse Fourier transform for zerofilling
-	zfill  = np.fft.ifft2(under)
-	del under
+	# zfill  = np.fft.ifft2(under)
+	zfill  = np.fft.ifft2(under, norm="ortho")
+	
 	# March through the temporal dimension
 	#for z in range(dimz):
 	# Assign the channels
 
-	# srcImage = np.abs(zfill)  
-	srcImage = np.real(zfill)
-	
-	srcImage = srcImage/np.max(srcImage) * 255.0
+	srcImage = np.absolute(zfill)  
+	# srcImage = zfill
+	# srcImage = np.abs(zfill) /255
 	# srcImage = np.expand_dims(srcImage, axis=0)
 	
 	#print srcImage.shape
 	dstImage = images 
 	
 	###########################################################
-
+	# Generate the 256 channel output
+	# Note that pixel value 128 corresponds to a vector
+	# [1 1 1 1 1 ... 1   0 0 0 0 0 ]  < Accumulating vector, not binary
+	# [0 1 2 3 4 ....128 ..		   ]  < Corresponding indices
+	# Example
+	# a 	= np.ones(10)
+	# idx 	= np.arange(10)
+	# pixel = 3
+	# a[idx>pixel] = 0
+	# idx = np.arange(256)
+	# dstImage = np.ones((256,dimz,dimy,dimx))
+	# for z in range(dimz):
+		# for y in range(dimy):
+			# for x in range(dimx):
+				# pixelVal = images[z,y,x]
+				# pixelVec = np.ones(256)
+				# pixelVec[idx>pixelVal] = 0
+				# dstImage[:,z,y,x] = pixelVec
+	# valImage = np.repeat(images, 256, axis=0) # Make repeat along z	
+	# dstImage = np.arange(256)
+	# dstImage[
+	# b = np.zeros((a.size, 256))
+	# b[np.arange(a.size),a] = 1
+	
+	# print srcImage.shape
+	# print dstImage.shape
  
 	return srcImage, dstImage, mask
 def test_generatePair(images):
