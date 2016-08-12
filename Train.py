@@ -36,7 +36,7 @@ def train():
 	model = get_model()
 	
 	
-	nb_folds = 5
+	nb_folds = 4
 	kfolds = KFold(len(images), nb_folds)
 	for iter in range(nb_iter):
 		print('-'*50)
@@ -44,7 +44,7 @@ def train():
 		print('-'*50) 
 		
 		X, y, R = generatePair(images)
-		del R
+		# del R
 		# X = X.astype(np.float32)
 		# y = y.astype(np.float32)
 		# X 		= X/255.0
@@ -87,13 +87,13 @@ def train():
 				run_id="direct_model", 
 				n_epoch=1, 
 				validation_set=(X_valid, y_valid),
-				shuffle=True,
+				shuffle=False,
 				show_metric=True,
-				snapshot_step=80, 
+				snapshot_step=75, 
 				snapshot_epoch=False,
 				batch_size=batch_size)
 		del X_train, X_valid, y_train, y_valid
-		del X, y
+		del X, y, R
 		if iter%100==0:
 			fname = 'model_direct_%05d.tfl' %(iter)
 			model.save(fname)
