@@ -24,28 +24,28 @@ def get_cae():
 	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*2)
 	encoder = tflearn.conv_2d(encoder, num_filter*2, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*4)
 	encoder = tflearn.conv_2d(encoder, num_filter*4, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 	
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*8)
 	encoder = tflearn.conv_2d(encoder, num_filter*8, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 
 
 	encoder = tflearn.residual_block(encoder, 2, num_filter*16)
@@ -70,7 +70,7 @@ def get_cae():
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 	
 	
-	# decoder = tflearn.dropout(decoder, 0.75)
+	decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -86,7 +86,7 @@ def get_cae():
 									 output_shape=[64, 64])
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
-	# decoder = tflearn.dropout(decoder, 0.75)
+	decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -102,7 +102,7 @@ def get_cae():
 									 output_shape=[128, 128])
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
-	# decoder = tflearn.dropout(decoder, 0.75)
+	decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -118,7 +118,7 @@ def get_cae():
 									 output_shape=[256, 256])
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
-	# decoder = tflearn.dropout(decoder, 0.75) 
+	decoder = tflearn.dropout(decoder, 0.75) 
 	
 	# decoder = tflearn.conv_2d(decoder, 20, 1, activation='relu')
 	decoder = tflearn.conv_2d_transpose(decoder, 
