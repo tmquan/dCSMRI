@@ -24,7 +24,7 @@ def train():
 	print "Load the data"
 	images = np.load('images.npy')
 	images = images[0:100,:,:,:]
-	images = images/255.0
+	# images = images/255.0
 	
 	##################################################################################
 	
