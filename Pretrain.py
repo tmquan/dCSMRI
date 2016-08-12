@@ -24,7 +24,7 @@ def train():
 	print "Load the data"
 	images = np.load('images.npy')
 	images = images[0:100,:,:,:]
-
+	images = images/255.0
 	
 	##################################################################################
 	
@@ -44,6 +44,7 @@ def train():
 		print('-'*50) 
 		
 		X, y, R = generatePair(images)
+		del R
 		# X 		= X/255.0
 		# y 		= y/255.0
 		print X.shape
@@ -90,7 +91,7 @@ def train():
 				snapshot_epoch=False,
 				batch_size=batch_size)
 		del X_train, X_valid, y_train, y_valid
-		del X, y, R
+		del X, y
 		if iter%100==0:
 			fname = 'model_pretrain_%05d.tfl' %(iter)
 			model.save(fname)

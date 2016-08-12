@@ -23,45 +23,47 @@ def get_cae():
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*1)
 	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='relu')
 	scale_0 = encoder
-	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	encoder = tflearn.dropout(encoder, 0.75)
+	# encoder = tflearn.dropout(encoder, 0.75)
 
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*2)
 	encoder = tflearn.conv_2d(encoder, num_filter*2, 3, activation='relu')
 	scale_1 = encoder
-	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	encoder = tflearn.dropout(encoder, 0.75)
+	# encoder = tflearn.dropout(encoder, 0.75)
 
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*4)
 	encoder = tflearn.conv_2d(encoder, num_filter*4, 3, activation='relu')
 	scale_2 = encoder
-	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	encoder = tflearn.dropout(encoder, 0.75)
+	# encoder = tflearn.dropout(encoder, 0.75)
 	
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*8)
 	encoder = tflearn.conv_2d(encoder, num_filter*8, 3, activation='relu')
 	scale_3 = encoder
-	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	encoder = tflearn.dropout(encoder, 0.75)
+	# encoder = tflearn.dropout(encoder, 0.75)
 
 
+	
+	# encoder = tflearn.conv_2d(encoder, num_filter*12, 3, activation='relu')
 	encoder = tflearn.residual_block(encoder, 2, num_filter*16)
-	# encoder = tflearn.conv_2d(encoder, num_filter*16, 3, activation='relu')
+	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 
 	decoder = encoder
 	# decoder = tflearn.conv_2d_transpose(decoder, 
-	# 								 nb_filter=num_filter*16, 
+	# 								 nb_filter=num_filter*12, 
 	# 								 filter_size=3, 
 	# 								 activation='relu',
 	# 								 output_shape=[16, 16])
-	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	
 
 
 
@@ -78,10 +80,12 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[32, 32])
-	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
-	decoder = decoder + scale_3
+	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
+	# decoder = decoder + scale_3
+	decoder = merge([decoder, scale_3], mode='elemwise_sum', axis=3)
+
 	
-	decoder = tflearn.dropout(decoder, 0.75)
+	# decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -95,9 +99,10 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[64, 64])
-	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
-	decoder = decoder + scale_2
-	decoder = tflearn.dropout(decoder, 0.75)
+	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
+	# decoder = decoder + scale_2
+	decoder = merge([decoder, scale_2], mode='elemwise_sum', axis=3)
+	# decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -111,9 +116,10 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[128, 128])
-	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
-	decoder = decoder + scale_1
-	decoder = tflearn.dropout(decoder, 0.75)
+	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
+	# decoder = decoder + scale_1
+	decoder = merge([decoder, scale_1], mode='elemwise_sum', axis=3)
+	# decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -127,17 +133,22 @@ def get_cae():
 									 filter_size=3, 
 									 activation='relu',
 									 output_shape=[256, 256])
-	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
-	decoder = decoder + scale_0
-	decoder = tflearn.dropout(decoder, 0.75) 
+	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
+	# decoder = decoder + scale_0
+	decoder = merge([decoder, scale_0], mode='elemwise_sum', axis=3)
+	# decoder = tflearn.dropout(decoder, 0.75) 
 	
 	# decoder = tflearn.conv_2d(decoder, 20, 1, activation='relu')
-	decoder = tflearn.conv_2d_transpose(decoder, 
-									 nb_filter=20, 
-									 filter_size=3, 
-									 activation='relu',
-									 output_shape=[256, 256])
-
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=20, 
+	# 								 filter_size=3, 
+	# 								 activation='relu',
+	# 								 output_shape=[256, 256])
+	decoder = tflearn.layers.conv.upscore_layer(decoder, 
+							 num_classes=256, 
+							 kernel_size=3, 
+							 shape=[1, 256, 256, 20]
+							 ) 
 	
 	return decoder
 ########################################################
@@ -149,8 +160,9 @@ def get_model():
 	arch = get_cae()
 
 	net = tflearn.regression(arch, optimizer='Ftrl', 
-						 metric='accuracy',
-						 learning_rate=0.001,
+						 shuffle_batches=False,
+						 metric=None,
+						 learning_rate=0.0001,
                          loss='mean_square')
 	# Training the network
 	model = DNN(net, 
