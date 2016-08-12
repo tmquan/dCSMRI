@@ -44,6 +44,8 @@ def train():
 		print('-'*50) 
 		
 		X, y, R = generatePair(images)
+		# X = X.astype(np.float32)
+		# y = y.astype(np.float32)
 		# X 		= X/255.0
 		# y 		= y/255.0
 		print X.shape

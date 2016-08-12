@@ -15,58 +15,58 @@ Augmentation.add_random_blur()
 
 def get_cae():
 	encoder = tflearn.input_data(shape=[None, 256, 256, 20], name='input')
-	encoder = encoder/255.0
+	# encoder = encoder/255.0
 	num_filter = 10*20
-	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='leaky_relu')
+	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='relu')
 	
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*1)
-	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='leaky_relu')
+	encoder = tflearn.conv_2d(encoder, num_filter*1, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
 	# encoder = tflearn.dropout(encoder, 0.75)
 
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*2)
-	encoder = tflearn.conv_2d(encoder, num_filter*2, 3, activation='leaky_relu')
+	encoder = tflearn.conv_2d(encoder, num_filter*2, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
 	# encoder = tflearn.dropout(encoder, 0.75)
 
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*4)
-	encoder = tflearn.conv_2d(encoder, num_filter*4, 3, activation='leaky_relu')
+	encoder = tflearn.conv_2d(encoder, num_filter*4, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
 	# encoder = tflearn.dropout(encoder, 0.75)
 	
 
 	# encoder = tflearn.residual_block(encoder, 1, num_filter*8)
-	encoder = tflearn.conv_2d(encoder, num_filter*8, 3, activation='leaky_relu')
+	encoder = tflearn.conv_2d(encoder, num_filter*8, 3, activation='relu')
 	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
 	# encoder = tflearn.dropout(encoder, 0.75)
 
 
-	# encoder = tflearn.residual_block(encoder, 1, num_filter*16)
-	encoder = tflearn.conv_2d(encoder, num_filter*16, 3, activation='leaky_relu')
-	# encoder = tflearn.layers.normalization.local_response_normalization(encoder)
+	encoder = tflearn.residual_block(encoder, 2, num_filter*16)
+	# encoder = tflearn.conv_2d(encoder, num_filter*16, 3, activation='relu')
+	encoder = tflearn.layers.normalization.local_response_normalization(encoder)
 
 
-
-	# decoder = tflearn.upsample_2d(encoder, 2)
-	decoder = tflearn.layers.conv.upscore_layer(encoder, 
+	decoder = encoder
+	# decoder = tflearn.upsample_2d(decoder, 2)
+	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 						 num_classes=256, 
 						 kernel_size=3, 
 						 shape=[1, 32, 32, num_filter*8]
 						 ) 
-	decoder = tflearn.conv_2d(decoder, num_filter*8, 3, activation='leaky_relu')
+	# decoder = tflearn.conv_2d(decoder, num_filter*8, 3, activation='relu')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*8)
-	# decoder = tflearn.conv_2d_transpose(decoder, 
-	# 								 nb_filter=num_filter*8, 
-	# 								 filter_size=3, 
-	# 								 activation='leaky_relu',
-	# 								 output_shape=[32, 32])
+	decoder = tflearn.conv_2d_transpose(decoder, 
+									 nb_filter=num_filter*8, 
+									 filter_size=3, 
+									 activation='relu',
+									 output_shape=[32, 32])
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 	
 	
@@ -77,13 +77,13 @@ def get_cae():
 							 kernel_size=3, 
 							 shape=[1, 64, 64, num_filter*4]
 							 ) 
-	decoder = tflearn.conv_2d(decoder, num_filter*4, 3, activation='leaky_relu')
+	# decoder = tflearn.conv_2d(decoder, num_filter*4, 3, activation='relu')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*4)
-	# decoder = tflearn.conv_2d_transpose(decoder, 
-	# 								 nb_filter=num_filter*4, 
-	# 								 filter_size=3, 
-	# 								 activation='leaky_relu',
-	# 								 output_shape=[64, 64])
+	decoder = tflearn.conv_2d_transpose(decoder, 
+									 nb_filter=num_filter*4, 
+									 filter_size=3, 
+									 activation='relu',
+									 output_shape=[64, 64])
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
 	# decoder = tflearn.dropout(decoder, 0.75)
@@ -93,13 +93,13 @@ def get_cae():
 							 kernel_size=3, 
 							 shape=[1, 128, 128, num_filter*2]
 							 ) 
-	decoder = tflearn.conv_2d(decoder, num_filter*2, 3, activation='leaky_relu')
+	# decoder = tflearn.conv_2d(decoder, num_filter*2, 3, activation='relu')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*2)
-	# decoder = tflearn.conv_2d_transpose(decoder, 
-	# 								 nb_filter=num_filter*2, 
-	# 								 filter_size=3, 
-	# 								 activation='leaky_relu',
-	# 								 output_shape=[128, 128])
+	decoder = tflearn.conv_2d_transpose(decoder, 
+									 nb_filter=num_filter*2, 
+									 filter_size=3, 
+									 activation='relu',
+									 output_shape=[128, 128])
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
 	# decoder = tflearn.dropout(decoder, 0.75)
@@ -109,23 +109,23 @@ def get_cae():
 							 kernel_size=3, 
 							 shape=[1, 256, 256, num_filter*1]
 							 ) 
-	decoder = tflearn.conv_2d(decoder, num_filter*1, 3, activation='leaky_relu')
+	# decoder = tflearn.conv_2d(decoder, num_filter*1, 3, activation='relu')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*1)
 	decoder = tflearn.conv_2d_transpose(decoder, 
 									 nb_filter=num_filter*1, 
 									 filter_size=3, 
-									 activation='leaky_relu',
+									 activation='relu',
 									 output_shape=[256, 256])
 	# decoder = tflearn.layers.normalization.local_response_normalization(decoder)
 
 	# decoder = tflearn.dropout(decoder, 0.75) 
 	
-	decoder = tflearn.conv_2d(decoder, 20, 1, activation='leaky_relu')
-	# decoder = tflearn.conv_2d_transpose(decoder, 
-	# 								 nb_filter=20, 
-	# 								 filter_size=3, 
-	# 								 activation='leaky_relu',
-	# 								 output_shape=[256, 256])
+	# decoder = tflearn.conv_2d(decoder, 20, 1, activation='relu')
+	decoder = tflearn.conv_2d_transpose(decoder, 
+									 nb_filter=20, 
+									 filter_size=3, 
+									 activation='relu',
+									 output_shape=[256, 256])
 
 	
 	return decoder
@@ -139,7 +139,7 @@ def get_model():
 
 	net = tflearn.regression(arch, optimizer='Ftrl', 
 						 metric='accuracy',
-						 learning_rate=0.001,
+						 learning_rate=0.00005,
                          loss='mean_square')
 	# Training the network
 	model = DNN(net, 
