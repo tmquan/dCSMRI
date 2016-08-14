@@ -27,7 +27,7 @@ def get_cae():
 	scale_0 = encoder
 	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 
 
 	encoder = tflearn.conv_2d(encoder, num_filter*2, 3, activation='relu', regularizer='L1')
@@ -35,7 +35,7 @@ def get_cae():
 	scale_1 = encoder
 	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 
 
 	encoder = tflearn.conv_2d(encoder, num_filter*4, 3, activation='relu', regularizer='L1')
@@ -43,7 +43,7 @@ def get_cae():
 	scale_2 = encoder
 	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 	
 
 	encoder = tflearn.conv_2d(encoder, num_filter*8, 3, activation='relu', regularizer='L1')
@@ -51,7 +51,7 @@ def get_cae():
 	scale_3 = encoder
 	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 	encoder = tflearn.max_pool_2d(encoder, 2)
-	# encoder = tflearn.dropout(encoder, 0.75)
+	encoder = tflearn.dropout(encoder, 0.75)
 
 
 	
@@ -89,7 +89,7 @@ def get_cae():
 	decoder = merge([decoder, scale_3], mode='elemwise_sum', axis=3)
 
 	
-	# decoder = tflearn.dropout(decoder, 0.75)
+	decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -107,7 +107,7 @@ def get_cae():
 	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
 	# decoder = decoder + scale_2
 	decoder = merge([decoder, scale_2], mode='elemwise_sum', axis=3)
-	# decoder = tflearn.dropout(decoder, 0.75)
+	decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -125,7 +125,7 @@ def get_cae():
 	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
 	# decoder = decoder + scale_1
 	decoder = merge([decoder, scale_1], mode='elemwise_sum', axis=3)
-	# decoder = tflearn.dropout(decoder, 0.75)
+	decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
 							 num_classes=256, 
@@ -143,7 +143,7 @@ def get_cae():
 	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
 	# decoder = decoder + scale_0
 	decoder = merge([decoder, scale_0], mode='elemwise_sum', axis=3)
-	# decoder = tflearn.dropout(decoder, 0.75) 
+	decoder = tflearn.dropout(decoder, 0.75) 
 	
 	# decoder = tflearn.conv_2d(decoder, 20, 1, activation='relu', regularizer='L1')
 	decoder = tflearn.conv_2d_transpose(decoder, 
@@ -152,14 +152,7 @@ def get_cae():
 									 activation='relu',
 									 regularizer='L1',
 									 output_shape=[256, 256])
-	# tflearn.add_weight_regularizer(decoder, 'L1', weight_decay=0.001)
-	# tflearn.losses.L1(decoder)
-	# decoder = tflearn.layers.conv.upscore_layer(decoder, 
-	# 						 num_classes=256, 
-	# 						 kernel_size=3, 
-	# 						 shape=[1, 256, 256, 20]
-	# 						 ) 
-	import tensorflow as tf
+	
 	# decoder = tf.round(decoder)
 	decoder = tf.clip_by_value(decoder, 0, 255)
 	
