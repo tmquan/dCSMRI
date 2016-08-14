@@ -14,6 +14,8 @@ Augmentation  = ImageAugmentation()
 Augmentation.add_random_blur()
 
 def get_cae():
+	# import tensorflow as tf
+	# with tf.device('/gpu:1'):
 	encoder = tflearn.input_data(shape=[None, 256, 256, 20], name='input')
 	# encoder = encoder/255.0
 	num_filter = 8*20
@@ -55,7 +57,7 @@ def get_cae():
 	
 	encoder = tflearn.conv_2d(encoder, num_filter*12, 3, activation='relu', regularizer='L1')
 	encoder = tflearn.residual_block(encoder, 1, num_filter*16, batch_norm=False, regularizer='L1')
-	encoder = tflearn.layers.normalization.batch_normalization(encoder)
+	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 
 	decoder = encoder
 	decoder = tflearn.conv_2d_transpose(decoder, 
@@ -167,7 +169,8 @@ def get_model():
 	"""
 	Define the architecture of the network is here
 	"""
-
+	# import tensorflow as tf
+	# with tf.device('/gpu:0'):
 	arch = get_cae()
 	r2 = tflearn.metrics.R2()
 	net = tflearn.regression(arch, optimizer='RMSProp',

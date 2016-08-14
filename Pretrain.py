@@ -24,7 +24,7 @@ def train():
 	print "Load the data"
 	images = np.load('images.npy')
 	images = images[0:100,:,:,:]
-	images = images/255.0
+	# images = images/255.0
 	
 	##################################################################################
 	
@@ -45,6 +45,8 @@ def train():
 		
 		X, y, R = generatePair(images)
 		# del R
+		# X = X.astype(np.float32)
+		# y = y.astype(np.float32)
 		# X 		= X/255.0
 		# y 		= y/255.0
 		print X.shape
@@ -82,7 +84,7 @@ def train():
 			
 						
 			model.fit(y_train, y_train, 
-				run_id="pretrain_model", 
+				run_id="direct_model", 
 				n_epoch=1, 
 				validation_set=(y_valid, y_valid),
 				shuffle=False,

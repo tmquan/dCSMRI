@@ -98,4 +98,8 @@ def train():
 			fname = 'model_direct_%05d.tfl' %(iter)
 			model.save(fname)
 if __name__ == '__main__':
+	import os
+	os.environ["CUDA_VISIBLE_DEVICES"]="1"
+	from tensorflow.python.client import device_lib
+	print device_lib.list_local_devices()
 	train()
