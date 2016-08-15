@@ -23,7 +23,7 @@ def train():
 	## Load the data 
 	print "Load the data"
 	images = np.load('images.npy')
-	images = images[0:100,:,:,:]
+	images = images[0:150,:,:,:]
 	# images = images/255.0
 	
 	##################################################################################
@@ -36,7 +36,7 @@ def train():
 	model = get_model()
 	
 	
-	nb_folds = 4
+	nb_folds = 3
 	kfolds = KFold(len(images), nb_folds)
 	for iter in range(nb_iter):
 		print('-'*50)
@@ -89,7 +89,7 @@ def train():
 				validation_set=(y_valid, y_valid),
 				shuffle=False,
 				show_metric=True,
-				snapshot_step=75, 
+				snapshot_step=100, 
 				snapshot_epoch=False,
 				batch_size=batch_size)
 		del X_train, X_valid, y_train, y_valid
@@ -98,4 +98,8 @@ def train():
 			fname = 'model_pretrain_%05d.tfl' %(iter)
 			model.save(fname)
 if __name__ == '__main__':
+	import os
+	os.environ["CUDA_VISIBLE_DEVICES"]="1"
+	from tensorflow.python.client import device_lib
+	print device_lib.list_local_devices()
 	train()

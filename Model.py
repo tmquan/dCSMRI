@@ -61,12 +61,12 @@ def get_cae():
 	# encoder = tflearn.layers.normalization.batch_normalization(encoder)
 
 	decoder = encoder
-	decoder = tflearn.conv_2d_transpose(decoder, 
-									 nb_filter=num_filter*12, 
-									 filter_size=3, 
-									 activation='relu',
-									 regularizer='L1',
-									 output_shape=[16, 16])
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*12, 
+	# 								 filter_size=3, 
+	# 								 activation='relu',
+	# 								 regularizer='L1',
+	# 								 output_shape=[16, 16])
 	
 
 
@@ -77,17 +77,17 @@ def get_cae():
 						 kernel_size=3, 
 						 shape=[1, 32, 32, num_filter*8]
 						 ) 
-	# decoder = tflearn.conv_2d(decoder, num_filter*8, 3, activation='relu', regularizer='L1')
+	decoder = tflearn.conv_2d(decoder, num_filter*8, 3, activation='relu', regularizer='L1')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*8, batch_norm=False, regularizer='L1')
-	decoder = tflearn.conv_2d_transpose(decoder, 
-									 nb_filter=num_filter*8, 
-									 filter_size=3, 
-									 activation='relu', 
-									 regularizer='L1',
-									 output_shape=[32, 32])
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*8, 
+	# 								 filter_size=3, 
+	# 								 activation='relu', 
+	# 								 regularizer='L1',
+	# 								 output_shape=[32, 32])
 	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
 	# decoder = decoder + scale_3
-	# decoder = merge([decoder, scale_3], mode='elemwise_sum', axis=3)
+	decoder = merge([decoder, scale_3], mode='elemwise_sum', axis=3)
 
 	
 	# decoder = tflearn.dropout(decoder, 0.75)
@@ -97,17 +97,17 @@ def get_cae():
 							 kernel_size=3, 
 							 shape=[1, 64, 64, num_filter*4]
 							 ) 
-	# decoder = tflearn.conv_2d(decoder, num_filter*4, 3, activation='relu', regularizer='L1')
+	decoder = tflearn.conv_2d(decoder, num_filter*4, 3, activation='relu', regularizer='L1')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*4, batch_norm=False, regularizer='L1')
-	decoder = tflearn.conv_2d_transpose(decoder, 
-									 nb_filter=num_filter*4, 
-									 filter_size=3, 
-									 activation='relu',
-									 regularizer='L1',
-									 output_shape=[64, 64])
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*4, 
+	# 								 filter_size=3, 
+	# 								 activation='relu',
+	# 								 regularizer='L1',
+	# 								 output_shape=[64, 64])
 	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
 	# decoder = decoder + scale_2
-	# decoder = merge([decoder, scale_2], mode='elemwise_sum', axis=3)
+	decoder = merge([decoder, scale_2], mode='elemwise_sum', axis=3)
 	# decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
@@ -115,17 +115,17 @@ def get_cae():
 							 kernel_size=3, 
 							 shape=[1, 128, 128, num_filter*2]
 							 ) 
-	# decoder = tflearn.conv_2d(decoder, num_filter*2, 3, activation='relu', regularizer='L1')
+	decoder = tflearn.conv_2d(decoder, num_filter*2, 3, activation='relu', regularizer='L1')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*2, batch_norm=False, regularizer='L1')
-	decoder = tflearn.conv_2d_transpose(decoder, 
-									 nb_filter=num_filter*2, 
-									 filter_size=3, 
-									 activation='relu',
-									 regularizer='L1',
-									 output_shape=[128, 128])
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*2, 
+	# 								 filter_size=3, 
+	# 								 activation='relu',
+	# 								 regularizer='L1',
+	# 								 output_shape=[128, 128])
 	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
 	# decoder = decoder + scale_1
-	# decoder = merge([decoder, scale_1], mode='elemwise_sum', axis=3)
+	decoder = merge([decoder, scale_1], mode='elemwise_sum', axis=3)
 	# decoder = tflearn.dropout(decoder, 0.75)
 	# decoder = tflearn.upsample_2d(decoder, 2)
 	decoder = tflearn.layers.conv.upscore_layer(decoder, 
@@ -133,26 +133,26 @@ def get_cae():
 							 kernel_size=3, 
 							 shape=[1, 256, 256, num_filter*1]
 							 ) 
-	# decoder = tflearn.conv_2d(decoder, num_filter*1, 3, activation='relu', regularizer='L1')
+	decoder = tflearn.conv_2d(decoder, num_filter*1, 3, activation='relu', regularizer='L1')
 	# decoder = tflearn.residual_block(decoder, 1, num_filter*1, batch_norm=False, regularizer='L1')
-	decoder = tflearn.conv_2d_transpose(decoder, 
-									 nb_filter=num_filter*1, 
-									 filter_size=3, 
-									 activation='relu',
-									 regularizer='L1',
-									 output_shape=[256, 256])
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=num_filter*1, 
+	# 								 filter_size=3, 
+	# 								 activation='relu',
+	# 								 regularizer='L1',
+	# 								 output_shape=[256, 256])
 	# decoder = tflearn.layers.normalization.batch_normalization(decoder)
 	# decoder = decoder + scale_0
-	# decoder = merge([decoder, scale_0], mode='elemwise_sum', axis=3)
+	decoder = merge([decoder, scale_0], mode='elemwise_sum', axis=3)
 	# decoder = tflearn.dropout(decoder, 0.75) 
 	
-	# decoder = tflearn.conv_2d(decoder, 20, 1, activation='relu', regularizer='L1')
-	decoder = tflearn.conv_2d_transpose(decoder, 
-									 nb_filter=20, 
-									 filter_size=3, 
-									 activation='relu',
-									 regularizer='L1',
-									 output_shape=[256, 256])
+	decoder = tflearn.conv_2d(decoder, 20, 1, activation='relu', regularizer='L1')
+	# decoder = tflearn.conv_2d_transpose(decoder, 
+	# 								 nb_filter=20, 
+	# 								 filter_size=3, 
+	# 								 activation='relu',
+	# 								 regularizer='L1',
+	# 								 output_shape=[256, 256])
 	
 	# decoder = tf.round(decoder)
 	decoder = tf.clip_by_value(decoder, 0, 255)
@@ -167,7 +167,7 @@ def get_model():
 	# with tf.device('/gpu:0'):
 	arch = get_cae()
 	r2 = tflearn.metrics.R2()
-	net = tflearn.regression(arch, optimizer='RMSProp',
+	net = tflearn.regression(arch, optimizer='Adam',
 						 learning_rate=0.001,
                          loss='mean_square')
 	# Training the network
