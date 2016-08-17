@@ -78,7 +78,7 @@ def get_cae():
 						 shape=[1, 32, 32, num_filter*8]
 						 ) 
 	decoder = tflearn.conv_2d(decoder, num_filter*8, 3, activation='relu', regularizer='L1')
-	# decoder = tflearn.residual_block(decoder, 1, num_filter*8, batch_norm=False, regularizer='L1')
+	decoder = tflearn.residual_block(decoder, 1, num_filter*8, batch_norm=False, regularizer='L1')
 	# decoder = tflearn.conv_2d_transpose(decoder, 
 	# 								 nb_filter=num_filter*8, 
 	# 								 filter_size=3, 
@@ -98,7 +98,7 @@ def get_cae():
 							 shape=[1, 64, 64, num_filter*4]
 							 ) 
 	decoder = tflearn.conv_2d(decoder, num_filter*4, 3, activation='relu', regularizer='L1')
-	# decoder = tflearn.residual_block(decoder, 1, num_filter*4, batch_norm=False, regularizer='L1')
+	decoder = tflearn.residual_block(decoder, 1, num_filter*4, batch_norm=False, regularizer='L1')
 	# decoder = tflearn.conv_2d_transpose(decoder, 
 	# 								 nb_filter=num_filter*4, 
 	# 								 filter_size=3, 
@@ -116,7 +116,7 @@ def get_cae():
 							 shape=[1, 128, 128, num_filter*2]
 							 ) 
 	decoder = tflearn.conv_2d(decoder, num_filter*2, 3, activation='relu', regularizer='L1')
-	# decoder = tflearn.residual_block(decoder, 1, num_filter*2, batch_norm=False, regularizer='L1')
+	decoder = tflearn.residual_block(decoder, 1, num_filter*2, batch_norm=False, regularizer='L1')
 	# decoder = tflearn.conv_2d_transpose(decoder, 
 	# 								 nb_filter=num_filter*2, 
 	# 								 filter_size=3, 
@@ -134,7 +134,7 @@ def get_cae():
 							 shape=[1, 256, 256, num_filter*1]
 							 ) 
 	decoder = tflearn.conv_2d(decoder, num_filter*1, 3, activation='relu', regularizer='L1')
-	# decoder = tflearn.residual_block(decoder, 1, num_filter*1, batch_norm=False, regularizer='L1')
+	decoder = tflearn.residual_block(decoder, 1, num_filter*1, batch_norm=False, regularizer='L1')
 	# decoder = tflearn.conv_2d_transpose(decoder, 
 	# 								 nb_filter=num_filter*1, 
 	# 								 filter_size=3, 
