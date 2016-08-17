@@ -94,7 +94,7 @@ def train():
 				batch_size=batch_size)
 		del X_train, X_valid, y_train, y_valid
 		del X, y, R
-		if iter%100==0:
+		if iter%10==0:
 			fname = 'model_direct_%05d.tfl' %(iter)
 			model.save(fname)
 if __name__ == '__main__':
